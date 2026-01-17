@@ -1,0 +1,66 @@
+Strategin är mean reversion mot VWAP med dynamiska band baserade på volatilitet (standardavvikelse).Vi bygger vwap såhär: För varje bar räknas ett typical price genom att addera barens high, low, close och sedan dividera med tre. Vi multiplicerar sedan typical price 
+med volymen för den baren. Datan grupperas sedan baserat på sessionen (när vi resetar tiden) vilket i detta fall sker vid 00:00 svensk tid eller 18:00 new york tid. VWAP räknas sedan ut genom att dividera den kumulativa typical price med 
+volymviktning (cum_tp_vol = cumsum(tp_vol)) med den kumulativa volymen (cum_vol = cumsum(volume)), så VWAP = cum_tp_vol / cum_vol. Vi räknar sedan ut standardavvikelse genom en löpande standardavvikelse på tp, TP_STDt​=std(TPsession≤t​). Vi definierar över och under band
+från vwap på detta vis: Upper = VWAP + std_mult ⋅ TP_STD, Lower = VWAP − std_mult ⋅ TP_STD, där vi i början sätter std_mult till 2.0. Long signal uppstår när nuvarande bar stänger under lower band och short signal uppstår när nuvarande bar stänger ovanför upper band. Exit 
+sätts alltid på vwap. Tanken är alltså att pris ska återgå till det volym-viktade typiska priset. Vi börjar testerna på EURUSD 5-minuters data från dukascopy. Vårt första in sample test blir 2012-2019 där strategin handlar hela dygnet runt. Vi hypotiserar att strategin
+presterar bättre med ett sessionsfönster under asia session eftersom det är mindre volatilitet, mindre rörelser och därmed bättre förutsättningar för mean reversion strategier. Men vårt första test körs utan några filter:
+Trades: 12749 
+Total PnL (points): 0.4595 
+Gross Profit: 5.9699 
+Gross Loss: -5.5103 
+Profit Factor: 1.0834 
+Winrate: 0.7101 
+Avg Win: 0.0007 
+Avg Loss: -0.0015 
+Expectancy (avg/trade): 0.0000 
+Max Drawdown (points): 0.1518 
+Max Losing Streak (trades): 6 
+Sharpe (trade-level): 2.2206
+Strategin generar väldigt många trades och har en tunn edge, en profit factor lite över 1 över nästan 13000 trades. Hög winrate med högre average loss än average win vilket är förväntat i mean reversion. Edgen är väldigt tunn men sålänge den finns fortsätter vi med tester.
+Vi testar nu att begränsa strategin till asia session. EFtersom VWAP återställs 00:00 och vi vill ge VWAP lite tid att värma upp sätter vi session start vid 01:00. London session börjar runt 08:00 så vi sätter session end vid 07:00:
+Trades: 4792
+Total PnL (points): 0.4042
+Gross Profit: 1.5352
+Gross Loss: -1.1309
+Profit Factor: 1.3574
+Winrate: 0.7546
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0402
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.8737
+Detta är en klar massiv förbättring. Antalet trades blir nästan 3x mindre samtidigt som profit factor och winrate går upp. Innan vi går vidare till optimering vill vi robusthetstesta strategin, detta gör vi genom att testa närliggande std_multi(2.0) värden för att 
+bekräfta att edgen inte ligger i ett slumpmässigt värde, utan i själva trade logiken. Vi testar STD_multi på 2.2 och 1.8:
+2.2:
+Trades: 4045
+Total PnL (points): 0.3800
+Gross Profit: 1.3556
+Gross Loss: -0.9756
+Profit Factor: 1.3895
+Winrate: 0.7446
+Avg Win: 0.0005
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0325
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 4.9868
+1.8:
+Trades: 5496
+Total PnL (points): 0.4240
+Gross Profit: 1.6649
+Gross Loss: -1.2409
+Profit Factor: 1.3417
+Winrate: 0.7529
+Avg Win: 0.0004
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0411
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.9827
+Detta bekräftar exakt det vi vill,vi går vidare med 2.0 Nu vet vi att det finns riktig edge i grundidén och vi  kan därför gå in på riktiga optimeringar. Asia session erbjuder ett bra landskap för mean reversion med lite  trend expansion, men ifall det plötsligt 
+skulle gå in i en expansion vill vi att mean reversion strategin ska kunna vara passiv. Ett simpelt sätt att bygga ett sådant filter är att endast tillåta trades när senaste timmens range är liten, alltså i en choppy regim.  Ännu en optimering vi kan göra är 
+ytterligare confirmation på våran entry. Just nu öppnar vi position så fort pris stänger utanflr bands, vi vill testa entry efter pris gått tillbaka innaför bands som confirmation att pris är påväg till VWAP. Vi börjar med entry confirmation eftersom range beräkning
+kräver ytterligare parametrar vilket vi oftast vill hålla oss ifrån i och med att vi vill hålla det så simpelt som möjligt. Därför går vi in i optimeringen med insikten att ifall edgen är lite högre hos den optimering som bidrar med mer komplexitet är den simplare 
+optimeringen fortfarande mer attraktiv. Däremot finns det såklart en subjektiv gräns där mer komplexitet föredras ifall det erbjuder tillräckligt mycket edge över det simplare. Vi testar nu på samma data som förut att sätta entry på return till insidan av upper/lower
+bands.
