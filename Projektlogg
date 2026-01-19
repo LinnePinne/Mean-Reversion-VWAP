@@ -17,7 +17,8 @@ Max Drawdown (points): 0.1518
 Max Losing Streak (trades): 6 
 Sharpe (trade-level): 2.2206
 Strategin generar väldigt många trades och har en tunn edge, en profit factor lite över 1 över nästan 13000 trades. Hög winrate med högre average loss än average win vilket är förväntat i mean reversion. Edgen är väldigt tunn men sålänge den finns fortsätter vi med tester.
-Vi testar nu att begränsa strategin till asia session. EFtersom VWAP återställs 00:00 och vi vill ge VWAP lite tid att värma upp sätter vi session start vid 01:00. London session börjar runt 08:00 så vi sätter session end vid 07:00:
+Vi testar nu att begränsa strategin till asia session. EFtersom VWAP återställs 00:00 och vi vill ge VWAP lite tid att värma upp sätter vi session start vid 01:00. London session börjar runt 08:00 så vi sätter session end vid 07:00, vi låter öppna positioner vara efter 
+sessionsfönstret, sessionen gäller alltså endast för entry signaler:
 Trades: 4792
 Total PnL (points): 0.4042
 Gross Profit: 1.5352
@@ -63,4 +64,19 @@ skulle gå in i en expansion vill vi att mean reversion strategin ska kunna vara
 ytterligare confirmation på våran entry. Just nu öppnar vi position så fort pris stänger utanflr bands, vi vill testa entry efter pris gått tillbaka innaför bands som confirmation att pris är påväg till VWAP. Vi börjar med entry confirmation eftersom range beräkning
 kräver ytterligare parametrar vilket vi oftast vill hålla oss ifrån i och med att vi vill hålla det så simpelt som möjligt. Därför går vi in i optimeringen med insikten att ifall edgen är lite högre hos den optimering som bidrar med mer komplexitet är den simplare 
 optimeringen fortfarande mer attraktiv. Däremot finns det såklart en subjektiv gräns där mer komplexitet föredras ifall det erbjuder tillräckligt mycket edge över det simplare. Vi testar nu på samma data som förut att sätta entry på return till insidan av upper/lower
-bands.
+bands. Logiken blir att clsoe ska stänga utanför lower/upper band och sedan stänga innanför, detta måste inte ske nästa bar, close > upper_band kan ske vid 02:20 och close < upper_band kan ske 02:45, detta blir en short signal. Både break och reclaim måste fortfarande
+ske inom sessionfösntret:
+Trades: 3553
+Total PnL (points): 0.2077
+Gross Profit: 0.9701
+Gross Loss: -0.7623
+Profit Factor: 1.2725
+Winrate: 0.7185
+Avg Win: 0.0004
+Avg Loss: -0.0008
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0353
+Max Losing Streak (trades): 8
+Sharpe (trade-level): 3.0853
+
+
