@@ -59,8 +59,8 @@ Expectancy (avg/trade): 0.0001
 Max Drawdown (points): 0.0411
 Max Losing Streak (trades): 6
 Sharpe (trade-level): 4.9827
-Detta bekräftar exakt det vi vill,vi går vidare med 2.0 Nu vet vi att det finns riktig edge i grundidén och vi  kan därför gå in på riktiga optimeringar. Asia session erbjuder ett bra landskap för mean reversion med lite  trend expansion, men ifall det plötsligt 
-skulle gå in i en expansion vill vi att mean reversion strategin ska kunna vara passiv. Ett simpelt sätt att bygga ett sådant filter är att endast tillåta trades när senaste timmens range är liten, alltså i en choppy regim.  Ännu en optimering vi kan göra är 
+Detta bekräftar exakt det vi vill,vi går vidare med 2.0 Nu vet vi att det finns riktig edge i grundidén och vi  kan därför gå in på riktiga optimeringar. Asia session erbjuder ett bra landskap för mean reversion med lite trend expansion, men ifall det plötsligt 
+skulle gå in i en expansion vill vi att mean reversion strategin ska kunna vara passiv. Ett simpelt sätt att bygga ett sådant filter är att endast tillåta trades när senaste timmens range är liten, alltså i en choppy regim. Ännu en optimering vi kan göra är 
 ytterligare confirmation på våran entry. Just nu öppnar vi position så fort pris stänger utanflr bands, vi vill testa entry efter pris gått tillbaka innaför bands som confirmation att pris är påväg till VWAP. Vi börjar med entry confirmation eftersom range beräkning
 kräver ytterligare parametrar vilket vi oftast vill hålla oss ifrån i och med att vi vill hålla det så simpelt som möjligt. Därför går vi in i optimeringen med insikten att ifall edgen är lite högre hos den optimering som bidrar med mer komplexitet är den simplare 
 optimeringen fortfarande mer attraktiv. Däremot finns det såklart en subjektiv gräns där mer komplexitet föredras ifall det erbjuder tillräckligt mycket edge över det simplare. Vi testar nu på samma data som förut att sätta entry på return till insidan av upper/lower
@@ -78,5 +78,86 @@ Expectancy (avg/trade): 0.0001
 Max Drawdown (points): 0.0353
 Max Losing Streak (trades): 8
 Sharpe (trade-level): 3.0853
-
-
+Vi filtrerar bort en hel del trades utan att förbättra edgen, det blir en liten förbättring i drawdown men det kostar både sharpe och profit factor. Detta är alltså inte något vi vill använda, då testar vi itsället något slags anti-trend filter. Vi räknar ut rangen 
+under ett visst antal bars, och ifall high - low är över t.ex. 1.2 skippar vi entries. Vi sätter våran lookback period till 12 bars vilket blir en timme på 5 minuters data och att rangen ska vara under 1.2 prisenheter:
+Trades: 64
+Total PnL (points): 0.0053
+Gross Profit: 0.0433
+Gross Loss: -0.0380
+Profit Factor: 1.1403
+Winrate: 0.8594
+Avg Win: 0.0008
+Avg Loss: -0.0042
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0113
+Max Losing Streak (trades): 1
+Sharpe (trade-level): 0.2721
+detta filtrer bort alldeles för många trades, vi höjer till max 5 prisenheter istället:
+Trades: 3640
+Total PnL (points): 0.3839
+Gross Profit: 1.3475
+Gross Loss: -0.9636
+Profit Factor: 1.3984
+Winrate: 0.7607
+Avg Win: 0.0005
+Avg Loss: -0.0011
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0369
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 4.8936
+filtrerar bort en del trades samtidigt som profit factor och sharpe blir något högre. Lite mindre total pnl på 1100 färre trades, detta är väldigt positivt. Vi testar närliggande maximum ranges, 4 och 6 som robusthetstest.
+4.0:
+Trades: 2457
+Total PnL (points): 0.3183
+Gross Profit: 1.0547
+Gross Loss: -0.7363
+Profit Factor: 1.4323
+Winrate: 0.7709
+Avg Win: 0.0006
+Avg Loss: -0.0013
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0284
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 4.6268
+6.0:
+Trades: 4391
+Total PnL (points): 0.4078
+Gross Profit: 1.4826
+Gross Loss: -1.0748
+Profit Factor: 1.3794
+Winrate: 0.7620
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0389
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.9769
+edgen blir bättre ju högre vi går så vi fortsätter testa uppåt.
+7.0:
+Trades: 4679
+Total PnL (points): 0.4142
+Gross Profit: 1.5248
+Gross Loss: -1.1106
+Profit Factor: 1.3729
+Winrate: 0.7572
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0406
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 5.0172
+8.0:
+Trades: 4751
+Total PnL (points): 0.4102
+Gross Profit: 1.5319
+Gross Loss: -1.1217
+Profit Factor: 1.3657
+Winrate: 0.7556
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0404
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.9576
+6.0 är sweet spot, där det filtreras bort tillräckligt många trades för att göra signifikant skillnad samtidigt som edgen blir bättre. Just nu är detta filtret dimensionsbaserat, 6 prisenheter betdyer inte samma sak i 2012 som i 2019 eller som på eurusd jämnfört med 
+GBPUSD. Vi gör om filtret till ATR baserat
