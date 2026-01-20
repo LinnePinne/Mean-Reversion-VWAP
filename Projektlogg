@@ -79,7 +79,8 @@ Max Drawdown (points): 0.0353
 Max Losing Streak (trades): 8
 Sharpe (trade-level): 3.0853
 Vi filtrerar bort en hel del trades utan att förbättra edgen, det blir en liten förbättring i drawdown men det kostar både sharpe och profit factor. Detta är alltså inte något vi vill använda, då testar vi itsället något slags anti-trend filter. Vi räknar ut rangen 
-under ett visst antal bars, och ifall high - low är över t.ex. 1.2 skippar vi entries. Vi sätter våran lookback period till 12 bars vilket blir en timme på 5 minuters data och att rangen ska vara under 1.2 prisenheter:
+under ett visst antal bars, sedan dividerar vi rangen med intraday standard deviaton som vi redan räknar ut med vwap, då får vi range_sigma. Ifall range_sigma är över t.ex. 1.2 skippar vi entries. Vi sätter våran lookback period till 12 bars vilket blir en timme på 
+5 minuters data och att rangen ska vara under 1.2:
 Trades: 64
 Total PnL (points): 0.0053
 Gross Profit: 0.0433
@@ -92,7 +93,7 @@ Expectancy (avg/trade): 0.0001
 Max Drawdown (points): 0.0113
 Max Losing Streak (trades): 1
 Sharpe (trade-level): 0.2721
-detta filtrer bort alldeles för många trades, vi höjer till max 5 prisenheter istället:
+detta filtrer bort alldeles för många trades, vi höjer till max 5 istället:
 Trades: 3640
 Total PnL (points): 0.3839
 Gross Profit: 1.3475
@@ -159,5 +160,765 @@ Expectancy (avg/trade): 0.0001
 Max Drawdown (points): 0.0404
 Max Losing Streak (trades): 6
 Sharpe (trade-level): 4.9576
-6.0 är sweet spot, där det filtreras bort tillräckligt många trades för att göra signifikant skillnad samtidigt som edgen blir bättre. Just nu är detta filtret dimensionsbaserat, 6 prisenheter betdyer inte samma sak i 2012 som i 2019 eller som på eurusd jämnfört med 
-GBPUSD. Vi gör om filtret till ATR baserat
+6.0 är sweet spot, där det filtreras bort tillräckligt många trades för att göra signifikant skillnad samtidigt som edgen blir bättre. Vi testar närliggande lookback bars som ytterligare robusthetstest.
+6 (30 min):
+Trades: 4637
+Total PnL (points): 0.4120
+Gross Profit: 1.5216
+Gross Loss: -1.1096
+Profit Factor: 1.3712
+Winrate: 0.7578
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0412
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.9883
+18 (90 min):
+Trades: 4043
+Total PnL (points): 0.3808
+Gross Profit: 1.4299
+Gross Loss: -1.0491
+Profit Factor: 1.3630
+Winrate: 0.7576
+Avg Win: 0.0005
+Avg Loss: -0.0011
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0389
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.6592
+Edgen håller och 12 bars eller 60 min är sweet spot. Vi låser in 12 bars lookback och range_max_sigma = 6 inför out of sample test. Nu är det dags att testa detta på EURUSD data 2020-2025:
+Trades: 3337
+Total PnL (points): 0.0599
+Gross Profit: 0.9631
+Gross Loss: -0.9032
+Profit Factor: 1.0664
+Winrate: 0.7231
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0415
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 0.8899
+Edgen finns men är kraftigt försvagad jäfmört med in sample. Positiv men tunn profit factor (1.066), hög winrate (72%), väldigt svag trade-level sharpe på 0.89, kontrollerad drawdown. Det är mycket troligt att detta försvagande beror på regimskifte i 2020-2022 med 
+stora intradags expansioner och trender även under de tidigare det var lugnare relativt, vilket är oattraktiva omständigheter för mean reversion. Vi testar varje år för sig för att ta reda på vilka år som skadar resultaten. Ifall stark edge finns vissa år men 
+min inte andra vet vi att det är en regimfråga. Då kan vi även acceptera dessa resultat eftersom vi ska kombinera denna strategin med trendföljar strategier.
+2020:
+Trades: 541
+Total PnL (points): 0.0209
+Gross Profit: 0.1712
+Gross Loss: -0.1503
+Profit Factor: 1.1389
+Winrate: 0.7153
+Avg Win: 0.0004
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0242
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 0.7991
+2021:
+Trades: 565
+Total PnL (points): -0.0031
+Gross Profit: 0.1342
+Gross Loss: -0.1373
+Profit Factor: 0.9771
+Winrate: 0.7416
+Avg Win: 0.0003
+Avg Loss: -0.0009
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0244
+Max Losing Streak (trades): 4
+Sharpe (trade-level): -0.1309
+2022:
+Trades: 529
+Total PnL (points): 0.0176
+Gross Profit: 0.2018
+Gross Loss: -0.1842
+Profit Factor: 1.0953
+Winrate: 0.7164
+Avg Win: 0.0005
+Avg Loss: -0.0012
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0218
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 0.5584
+2023:
+Trades: 585
+Total PnL (points): 0.0277
+Gross Profit: 0.1509
+Gross Loss: -0.1232
+Profit Factor: 1.2251
+Winrate: 0.7248
+Avg Win: 0.0004
+Avg Loss: -0.0008
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0260
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 1.3049
+2024:
+Trades: 574
+Total PnL (points): 0.0052
+Gross Profit: 0.1158
+Gross Loss: -0.1106
+Profit Factor: 1.0469
+Winrate: 0.7474
+Avg Win: 0.0003
+Avg Loss: -0.0008
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0204
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 0.2219
+2025:
+Trades: 543
+Total PnL (points): -0.0083
+Gross Profit: 0.1892
+Gross Loss: -0.1975
+Profit Factor: 0.9581
+Winrate: 0.6906
+Avg Win: 0.0005
+Avg Loss: -0.0012
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0349
+Max Losing Streak (trades): 5
+Sharpe (trade-level): -0.2300
+Strategin har svag men positiv edge vissa år och går negativ 2021 och 2025. Edgen är alltså regimkänslig och är för liten för att överleva sämre år. Även de negativa åren är winrate hög 2021: 74%, 2025: 69% men hade negativa resultat vilket innebär att förlusterna blir 
+mycket större än vinsterna. Vi accepterar dessa resultat eftersom vi ska testa fler marknader och i slutändan kombinera denna strategi med andra (givet att denna strategi faktist visar robusthet). Vi går över till att testa andra forex par. Vi testar majors där 
+vi kan använda samma sessionsfönster i början för att slippa ändra mycket i koden. Vi börjar med GBPUSD, USDCAD och USDCHF och skriver ut stats per år tillsammans med totala stats. 
+GBPUSD:
+Trades: 7769
+Total PnL (points): 0.4457
+Gross Profit: 3.0612
+Gross Loss: -2.6155
+Profit Factor: 1.1704
+Winrate: 0.7556
+Avg Win: 0.0005
+Avg Loss: -0.0014
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.1496
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 2.5811
+--- PER-ÅR STATS ---
+GBPUSD - 2012:
+Trades: 514
+Total PnL (points): 0.0392
+Gross Profit: 0.1899
+Gross Loss: -0.1507
+Profit Factor: 1.2600
+Winrate: 0.7665
+Avg Win: 0.0005
+Avg Loss: -0.0013
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0207
+Max Losing Streak (trades): 3
+Sharpe (trade-level): 1.3232
+
+GBPUSD - 2013:
+Trades: 562
+Total PnL (points): 0.0907
+Gross Profit: 0.2559
+Gross Loss: -0.1653
+Profit Factor: 1.5485
+Winrate: 0.7811
+Avg Win: 0.0006
+Avg Loss: -0.0013
+Expectancy (avg/trade): 0.0002
+Max Drawdown (points): 0.0419
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 2.6635
+
+GBPUSD - 2014:
+Trades: 553
+Total PnL (points): 0.0872
+Gross Profit: 0.1941
+Gross Loss: -0.1069
+Profit Factor: 1.8160
+Winrate: 0.7776
+Avg Win: 0.0005
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0002
+Max Drawdown (points): 0.0188
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 3.6179
+
+GBPUSD - 2015:
+Trades: 582
+Total PnL (points): 0.0833
+Gross Profit: 0.2567
+Gross Loss: -0.1735
+Profit Factor: 1.4800
+Winrate: 0.8024
+Avg Win: 0.0005
+Avg Loss: -0.0015
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0160
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 1.7432
+
+GBPUSD - 2016:
+Trades: 518
+Total PnL (points): -0.0171
+Gross Profit: 0.2964
+Gross Loss: -0.3135
+Profit Factor: 0.9454
+Winrate: 0.7278
+Avg Win: 0.0008
+Avg Loss: -0.0022
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.1496
+Max Losing Streak (trades): 4
+Sharpe (trade-level): -0.1642
+
+GBPUSD - 2017:
+Trades: 522
+Total PnL (points): -0.0215
+Gross Profit: 0.1924
+Gross Loss: -0.2139
+Profit Factor: 0.8993
+Winrate: 0.7605
+Avg Win: 0.0005
+Avg Loss: -0.0017
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0433
+Max Losing Streak (trades): 4
+Sharpe (trade-level): -0.4506
+
+GBPUSD - 2018:
+Trades: 608
+Total PnL (points): 0.1000
+Gross Profit: 0.2177
+Gross Loss: -0.1177
+Profit Factor: 1.8492
+Winrate: 0.7549
+Avg Win: 0.0005
+Avg Loss: -0.0008
+Expectancy (avg/trade): 0.0002
+Max Drawdown (points): 0.0143
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 4.6163
+
+GBPUSD - 2019:
+Trades: 525
+Total PnL (points): 0.0368
+Gross Profit: 0.1747
+Gross Loss: -0.1379
+Profit Factor: 1.2672
+Winrate: 0.7695
+Avg Win: 0.0004
+Avg Loss: -0.0011
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0239
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 1.1137
+
+GBPUSD - 2020:
+Trades: 499
+Total PnL (points): -0.0351
+Gross Profit: 0.2178
+Gross Loss: -0.2529
+Profit Factor: 0.8612
+Winrate: 0.6954
+Avg Win: 0.0006
+Avg Loss: -0.0017
+Expectancy (avg/trade): -0.0001
+Max Drawdown (points): 0.0482
+Max Losing Streak (trades): 7
+Sharpe (trade-level): -0.7599
+
+GBPUSD - 2021:
+Trades: 584
+Total PnL (points): 0.0016
+Gross Profit: 0.1984
+Gross Loss: -0.1968
+Profit Factor: 1.0081
+Winrate: 0.7329
+Avg Win: 0.0005
+Avg Loss: -0.0013
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0408
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 0.0465
+
+GBPUSD - 2022:
+Trades: 559
+Total PnL (points): 0.0114
+Gross Profit: 0.2870
+Gross Loss: -0.2756
+Profit Factor: 1.0415
+Winrate: 0.7335
+Avg Win: 0.0007
+Avg Loss: -0.0018
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0720
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 0.1830
+
+GBPUSD - 2023:
+Trades: 575
+Total PnL (points): 0.0672
+Gross Profit: 0.2062
+Gross Loss: -0.1391
+Profit Factor: 1.4829
+Winrate: 0.7478
+Avg Win: 0.0005
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0205
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 2.4683
+
+GBPUSD - 2024:
+Trades: 606
+Total PnL (points): 0.0324
+Gross Profit: 0.1704
+Gross Loss: -0.1380
+Profit Factor: 1.2349
+Winrate: 0.7871
+Avg Win: 0.0004
+Avg Loss: -0.0011
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0418
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 1.0973
+
+GBPUSD - 2025:
+Trades: 562
+Total PnL (points): -0.0303
+Gross Profit: 0.2036
+Gross Loss: -0.2338
+Profit Factor: 0.8706
+Winrate: 0.7313
+Avg Win: 0.0005
+Avg Loss: -0.0015
+Expectancy (avg/trade): -0.0001
+Max Drawdown (points): 0.0511
+Max Losing Streak (trades): 5
+Sharpe (trade-level): -0.8112
+Totalt 7769 trades, profit factor: 1.17, sharpe: 2.58, PnL: +0.4457. Dessa är okej, lite instabila stats som fungerar som en portföljkomponent. Strategin på GBPUSD ger vissa riktigt fina år men också vissa väldigt svaga eller negativa perioder. UNder de marknader som
+inte mean revertar på det sätt som strategin kan utnyttja blir förlusterna stora. När pris inte går tillbaka till VWAP och istället fortsätter trenda under en längre period blir förlusterna väldigt stora och det är troligt att det är denna risk som försvagar strategin
+mest i trendregimer. Vi utgår alltid från att vi inte vill optimera eller lägga till ytterligare parametrar i strategin baserat på out of sample, men när vi får sådana resultat som vi fått måste vi göra en diagnos av varför OOS failar och lägga till riskkontroller
+som inte ändrar strategins natur utan som är motiverade utifrån ett analytiskt perspektiv. Med detta sagt bör vi testa någon slags tids stop loss som reducerar risken för trendregimer där förlusterna blir väldigt stora. Vi implementerar en time stop på 90 minuter 
+där vi stänger positionen ifall exit på VWAP inte skett ännu, så testar vi GBPUSD 2012-2026:
+Market: GBPUSD
+Trades: 8996
+Total PnL (points): 0.3901
+Gross Profit: 2.7247
+Gross Loss: -2.3346
+Profit Factor: 1.1671
+Winrate: 0.6142
+Avg Win: 0.0005
+Avg Loss: -0.0007
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0889
+Max Losing Streak (trades): 11
+Sharpe (trade-level): 4.0330
+--- PER-ÅR STATS ---
+GBPUSD - 2012:
+Trades: 589
+Total PnL (points): 0.0195
+Gross Profit: 0.1606
+Gross Loss: -0.1411
+Profit Factor: 1.1381
+Winrate: 0.6112
+Avg Win: 0.0004
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0108
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 1.1151
+
+GBPUSD - 2013:
+Trades: 656
+Total PnL (points): 0.0609
+Gross Profit: 0.2305
+Gross Loss: -0.1696
+Profit Factor: 1.3592
+Winrate: 0.6433
+Avg Win: 0.0005
+Avg Loss: -0.0007
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0130
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 2.7153
+
+GBPUSD - 2014:
+Trades: 636
+Total PnL (points): 0.0265
+Gross Profit: 0.1591
+Gross Loss: -0.1327
+Profit Factor: 1.1994
+Winrate: 0.6305
+Avg Win: 0.0004
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0160
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 1.5473
+
+GBPUSD - 2015:
+Trades: 666
+Total PnL (points): 0.0738
+Gross Profit: 0.2194
+Gross Loss: -0.1457
+Profit Factor: 1.5065
+Winrate: 0.6471
+Avg Win: 0.0005
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0118
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 3.9148
+
+GBPUSD - 2016:
+Trades: 609
+Total PnL (points): 0.0019
+Gross Profit: 0.2860
+Gross Loss: -0.2840
+Profit Factor: 1.0069
+Winrate: 0.6190
+Avg Win: 0.0008
+Avg Loss: -0.0012
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0889
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 0.0295
+
+GBPUSD - 2017:
+Trades: 610
+Total PnL (points): 0.0192
+Gross Profit: 0.1677
+Gross Loss: -0.1485
+Profit Factor: 1.1293
+Winrate: 0.6311
+Avg Win: 0.0004
+Avg Loss: -0.0007
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0127
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 1.0866
+
+GBPUSD - 2018:
+Trades: 689
+Total PnL (points): 0.0557
+Gross Profit: 0.1940
+Gross Loss: -0.1383
+Profit Factor: 1.4032
+Winrate: 0.6284
+Avg Win: 0.0004
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0101
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 3.1877
+
+GBPUSD - 2019:
+Trades: 597
+Total PnL (points): 0.0336
+Gross Profit: 0.1444
+Gross Loss: -0.1108
+Profit Factor: 1.3031
+Winrate: 0.6365
+Avg Win: 0.0004
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0065
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 2.3800
+
+GBPUSD - 2020:
+Trades: 605
+Total PnL (points): -0.0384
+Gross Profit: 0.2005
+Gross Loss: -0.2389
+Profit Factor: 0.8394
+Winrate: 0.5636
+Avg Win: 0.0006
+Avg Loss: -0.0009
+Expectancy (avg/trade): -0.0001
+Max Drawdown (points): 0.0482
+Max Losing Streak (trades): 11
+Sharpe (trade-level): -1.4369
+
+GBPUSD - 2021:
+Trades: 683
+Total PnL (points): 0.0131
+Gross Profit: 0.1825
+Gross Loss: -0.1695
+Profit Factor: 1.0771
+Winrate: 0.5783
+Avg Win: 0.0005
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0183
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 0.7406
+
+GBPUSD - 2022:
+Trades: 653
+Total PnL (points): 0.0600
+Gross Profit: 0.2763
+Gross Loss: -0.2163
+Profit Factor: 1.2776
+Winrate: 0.6110
+Avg Win: 0.0007
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0124
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 2.0461
+
+GBPUSD - 2023:
+Trades: 683
+Total PnL (points): 0.0446
+Gross Profit: 0.1879
+Gross Loss: -0.1432
+Profit Factor: 1.3117
+Winrate: 0.5871
+Avg Win: 0.0005
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0088
+Max Losing Streak (trades): 8
+Sharpe (trade-level): 2.7332
+
+GBPUSD - 2024:
+Trades: 677
+Total PnL (points): 0.0355
+Gross Profit: 0.1409
+Gross Loss: -0.1054
+Profit Factor: 1.3366
+Winrate: 0.6322
+Avg Win: 0.0003
+Avg Loss: -0.0004
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0089
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 2.7370
+
+GBPUSD - 2025:
+Trades: 643
+Total PnL (points): -0.0159
+Gross Profit: 0.1748
+Gross Loss: -0.1907
+Profit Factor: 0.9168
+Winrate: 0.5785
+Avg Win: 0.0005
+Avg Loss: -0.0007
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0326
+Max Losing Streak (trades): 8
+Sharpe (trade-level): -0.8059
+Jämfört med innan time stop blir det fler trades, marginellt lägre profit factor (i princip samma), lägre total avkastning, winrate faller, average loss halveras samtidigt som average win är samma, drawdown är största förbättringen som går från -0.1496 till -0.0889 och
+sist men absolut inte minst en massiv förbättring i sharpe från 2.58 till 4.03. Vi testar samma riskkontroll på EURUSD 2012 - 2026:
+--- STATS ---
+Market: EURUSD
+Trades: 8678
+Total PnL (points): 0.1753
+Gross Profit: 2.0597
+Gross Loss: -1.8844
+Profit Factor: 1.0930
+Winrate: 0.6109
+Avg Win: 0.0004
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0417
+Max Losing Streak (trades): 8
+Sharpe (trade-level): 2.7239
+
+--- PER-ÅR STATS ---
+
+EURUSD - 2012:
+Trades: 531
+Total PnL (points): -0.0080
+Gross Profit: 0.1714
+Gross Loss: -0.1794
+Profit Factor: 0.9555
+Winrate: 0.6102
+Avg Win: 0.0005
+Avg Loss: -0.0009
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0332
+Max Losing Streak (trades): 5
+Sharpe (trade-level): -0.3369
+
+EURUSD - 2013:
+Trades: 615
+Total PnL (points): 0.0359
+Gross Profit: 0.1648
+Gross Loss: -0.1289
+Profit Factor: 1.2784
+Winrate: 0.6488
+Avg Win: 0.0004
+Avg Loss: -0.0006
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0074
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 2.1239
+
+EURUSD - 2014:
+Trades: 646
+Total PnL (points): 0.0220
+Gross Profit: 0.1312
+Gross Loss: -0.1092
+Profit Factor: 1.2016
+Winrate: 0.6502
+Avg Win: 0.0003
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0187
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 1.5354
+
+EURUSD - 2015:
+Trades: 617
+Total PnL (points): 0.0091
+Gross Profit: 0.1935
+Gross Loss: -0.1844
+Profit Factor: 1.0494
+Winrate: 0.5900
+Avg Win: 0.0005
+Avg Loss: -0.0007
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0203
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 0.4452
+
+EURUSD - 2016:
+Trades: 648
+Total PnL (points): 0.0091
+Gross Profit: 0.1711
+Gross Loss: -0.1619
+Profit Factor: 1.0564
+Winrate: 0.6204
+Avg Win: 0.0004
+Avg Loss: -0.0007
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0225
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 0.3673
+
+EURUSD - 2017:
+Trades: 581
+Total PnL (points): 0.0232
+Gross Profit: 0.1396
+Gross Loss: -0.1164
+Profit Factor: 1.1995
+Winrate: 0.6093
+Avg Win: 0.0004
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0094
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 1.5764
+
+EURUSD - 2018:
+Trades: 712
+Total PnL (points): 0.0658
+Gross Profit: 0.1864
+Gross Loss: -0.1205
+Profit Factor: 1.5461
+Winrate: 0.6742
+Avg Win: 0.0004
+Avg Loss: -0.0005
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0071
+Max Losing Streak (trades): 4
+Sharpe (trade-level): 4.3501
+
+EURUSD - 2019:
+Trades: 637
+Total PnL (points): 0.0056
+Gross Profit: 0.0902
+Gross Loss: -0.0846
+Profit Factor: 1.0657
+Winrate: 0.6013
+Avg Win: 0.0002
+Avg Loss: -0.0003
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0072
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 0.5764
+
+EURUSD - 2020:
+Trades: 626
+Total PnL (points): -0.0027
+Gross Profit: 0.1482
+Gross Loss: -0.1510
+Profit Factor: 0.9819
+Winrate: 0.5719
+Avg Win: 0.0004
+Avg Loss: -0.0006
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0243
+Max Losing Streak (trades): 7
+Sharpe (trade-level): -0.1526
+
+EURUSD - 2021:
+Trades: 639
+Total PnL (points): 0.0109
+Gross Profit: 0.1187
+Gross Loss: -0.1078
+Profit Factor: 1.1010
+Winrate: 0.5837
+Avg Win: 0.0003
+Avg Loss: -0.0004
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0114
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 0.9423
+
+EURUSD - 2022:
+Trades: 610
+Total PnL (points): -0.0126
+Gross Profit: 0.1679
+Gross Loss: -0.1804
+Profit Factor: 0.9304
+Winrate: 0.5557
+Avg Win: 0.0005
+Avg Loss: -0.0007
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0226
+Max Losing Streak (trades): 8
+Sharpe (trade-level): -0.6896
+
+EURUSD - 2023:
+Trades: 654
+Total PnL (points): 0.0341
+Gross Profit: 0.1392
+Gross Loss: -0.1050
+Profit Factor: 1.3250
+Winrate: 0.6315
+Avg Win: 0.0003
+Avg Loss: -0.0004
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0067
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 2.7972
+
+EURUSD - 2024:
+Trades: 651
+Total PnL (points): 0.0064
+Gross Profit: 0.0975
+Gross Loss: -0.0910
+Profit Factor: 1.0708
+Winrate: 0.6068
+Avg Win: 0.0002
+Avg Loss: -0.0004
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0094
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 0.5695
+
+EURUSD - 2025:
+Trades: 511
+Total PnL (points): -0.0237
+Gross Profit: 0.1401
+Gross Loss: -0.1637
+Profit Factor: 0.8554
+Winrate: 0.5812
+Avg Win: 0.0005
+Avg Loss: -0.0008
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.0417
+Max Losing Streak (trades): 8
+Sharpe (trade-level): -1.1199
+
