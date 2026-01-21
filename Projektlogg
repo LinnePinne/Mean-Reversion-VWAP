@@ -458,33 +458,33 @@ Sharpe (trade-level): -1.0767
 Totalt 5035 trades, profit factor: 1.12, sharpe: 1.69, PnL: +0.2319. Dessa är okej, lite instabila stats som fungerar som en portföljkomponent. Strategin på GBPUSD ger vissa riktigt fina år men också vissa väldigt svaga eller negativa perioder. Men den funkar som 
 portfölj komponent, nu testar vi USDJPY med 01-07 som sessionsfönster:
 Market: USDJPY
-Trades: 6773
-Total PnL (points): -27.1341
-Gross Profit: 354.6272
-Gross Loss: -381.7614
-Profit Factor: 0.9289
-Winrate: 0.7003
-Avg Win: 0.0748
-Avg Loss: -0.1881
-Expectancy (avg/trade): -0.0040
-Max Drawdown (points): 35.7752
-Max Losing Streak (trades): 8
-Sharpe (trade-level): -1.4456
+Trades: 4308
+Total PnL (points): -38.0609
+Gross Profit: 235.3640
+Gross Loss: -273.4249
+Profit Factor: 0.8608
+Winrate: 0.6699
+Avg Win: 0.0816
+Avg Loss: -0.1923
+Expectancy (avg/trade): -0.0088
+Max Drawdown (points): 41.9380
+Max Losing Streak (trades): 5
+Sharpe (trade-level): -2.3533
 Negativ edge, vi har kört med samma sessionsfönster som de andra marknaderna men i slutet av detta fönster är tokyo aktivt så vi testar ändra sessionen till sen new orkt/tidig Asia 22:00-03:00 och vi ändrar även vwap reset time så att den är sessionsbaserad på den tid
 vi testar. Vi vill att vwap ska ha en timme att värma upp innan sessionen börjar så vi resettar vwap vid 21:00. Vi resettar vwap en timme innan session start i alla kommande tester:
 Market: USDJPY
-Trades: 5546
-Total PnL (points): 65.2659
-Gross Profit: 295.0422
-Gross Loss: -229.7763
-Profit Factor: 1.2840
-Winrate: 0.7407
-Avg Win: 0.0718
-Avg Loss: -0.1598
-Expectancy (avg/trade): 0.0118
-Max Drawdown (points): 6.3332
+Trades: 5458
+Total PnL (points): 48.2910
+Gross Profit: 280.4585
+Gross Loss: -232.1675
+Profit Factor: 1.2080
+Winrate: 0.7279
+Avg Win: 0.0706
+Avg Loss: -0.1563
+Expectancy (avg/trade): 0.0088
+Max Drawdown (points): 6.8140
 Max Losing Streak (trades): 7
-Sharpe (trade-level): 4.5290
+Sharpe (trade-level): 3.3518
 Stor skilland, vi har nu stark edge. USDJPY är en portfölj kandidat med sessionen 22-03 (vwap reset 21). Vi testar nu AUDUSD med 01-07:
 Market: AUDUSD
 Trades: 5326
