@@ -1,13 +1,2 @@
 Vi testar alla marknader EURUSD, GBPUSD, USDJPY, AUDUSD, USDCHF, USDCAD i en gemensam portfölj där alla marknader tar på sig lika risk. 
-Start Capital: 50000.0000
-End Equity: 90996.0758
-Net PnL ($): 40996.0758
-Return (%): 81.9922
-Max Drawdown ($): 1023.9435
-Max Drawdown (%): 1.3281
-Markets: 6
-Trades Closed: 27806
-Sharpe (daily, ann.): 2.6198
-Sortino (daily, ann.): 1.8886
-CAGR (%): 4.3690
-Calmar: 3.2897
+
