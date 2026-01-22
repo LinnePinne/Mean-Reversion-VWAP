@@ -1,2 +1,13 @@
+För att definiera risk per trade utan sl bör vi först ta fram Max Adverse Price (MAE) vilket är max rörelse mot oss innan exit. Sedan konverterar vi MAE till cash givet position size och definierar risk som t.ex. Risk per trade = P95(MAE_cash). MAE baserat på samma kod
+vi använt i projektloggen där vi räknas i pips:
+MAE P95 (pips): 41.6800
+MAE P99 (pips): 90.1600
+Avg MAE (pips): 10.3593
+P95 MAE ~ 41.68 pips: i 5% av trades går det emot er minst ~42 pips innan exit. P99 MAE ~ 90.16 pips: “svansrisk” – 1% av trades går emot er ~90 pips eller mer innan exit. Vi sizar baserat på 95 percentilen, så 40 pips. För att konvertera MAE_pips till cash risk per lot
+behöver vi pip value för instrumentet. För EURUSD på USD FTMO konto är det 10 dollar/pip per 1.00 lot. Så P95 loss per 1 lot ≈ 40 pips × $10 = $400. Då räknar vi ut sizing som Lots = RiskBudgetCash / (MAE_quantile_pips × pipValuePerLot). 
+Exempelvis RiskBudgetCash = 250 eller 0.5% (i samma valuta som P/L), MAE_q = P95 = 41.68 pips, pipValuePerLot = 10 (om USD-konto EURUSD), Lots ≈ 250 / (40 × 10) = 0.625 lots.
+
+
+
 Vi testar alla marknader EURUSD, GBPUSD, USDJPY, AUDUSD, USDCHF, USDCAD i en gemensam portfölj där alla marknader tar på sig lika risk. 
 
