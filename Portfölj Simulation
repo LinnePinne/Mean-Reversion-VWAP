@@ -1,13 +1,123 @@
-För att definiera risk per trade utan sl bör vi först ta fram Max Adverse Price (MAE) vilket är max rörelse mot oss innan exit. Sedan konverterar vi MAE till cash givet position size och definierar risk som t.ex. Risk per trade = P95(MAE_cash). MAE baserat på samma kod
-vi använt i projektloggen där vi räknas i pips:
-MAE P95 (pips): 41.6800
-MAE P99 (pips): 90.1600
-Avg MAE (pips): 10.3593
-P95 MAE ~ 41.68 pips: i 5% av trades går det emot er minst ~42 pips innan exit. P99 MAE ~ 90.16 pips: “svansrisk” – 1% av trades går emot er ~90 pips eller mer innan exit. Vi sizar baserat på 95 percentilen, så 40 pips. För att konvertera MAE_pips till cash risk per lot
-behöver vi pip value för instrumentet. För EURUSD på USD FTMO konto är det 10 dollar/pip per 1.00 lot. Så P95 loss per 1 lot ≈ 40 pips × $10 = $400. Då räknar vi ut sizing som Lots = RiskBudgetCash / (MAE_quantile_pips × pipValuePerLot). 
-Exempelvis RiskBudgetCash = 250 eller 0.5% (i samma valuta som P/L), MAE_q = P95 = 41.68 pips, pipValuePerLot = 10 (om USD-konto EURUSD), Lots ≈ 250 / (40 × 10) = 0.625 lots.
+Vi delar risken lika för alla marknader, så varje marknad har tillgång till en viss andel av kapitalet risk_exposure_usd = equity/n_markets. Vi har en portfölj motor där vi kan köra alla marknader nu men vi får alldeles för optimistiska resultat så för att fix detta 
+kollar vi bara på EURUSD.
+--- STATS ---
+Market: EURUSD
+Trades: 5551
+Total PnL (points): 0.8547
+Gross Profit: 2.1623
+Gross Loss: -1.3075
+Profit Factor: 1.6537
+Winrate: 0.7824
+Avg Win: 0.0005
+Avg Loss: -0.0011
+Expectancy (avg/trade): 0.0002
+Max Drawdown (points): 0.0303
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 9.6351
+Days total: 5041
+Days non-zero: 3652
+Share non-zero: 0.7244594326522515
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 3266.1593
+Max DD MTM (%): 3.7708
+Max Intraday DD MTM ($): 2508.1540
+Max Intraday DD MTM (%): 3.7708
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: 53440.26841808634
+Equity change: 53440.26841808646
+Diff: -1.1641532182693481e-10
+Avg Units: 67042.50721062122
+Median Units: 66319.83387918046
+Avg pips/trade: 1.5398054404598704
+Median pips/trade: 3.0599999999981042
+Approx $ per pip @ avg units: 6.704250721062122
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 103440.2684
+Net PnL ($): 53440.2684
+Return (%): 106.8805
+Max Drawdown ($): 2462.4572
+Max Drawdown (%): 2.7576
+Markets: 1
+Trades Closed: 5551
+Days: 5041.0000
+Years: 13.8110
+Sharpe (daily, ann.): 2.4838
+Sortino (daily, ann.): 3.0473
+CAGR (%): 5.4076
+Calmar: 1.9610
+Max DD MTM ($): 3266.1593
+Max DD MTM (%): 3.7708
+Max Intraday DD MTM ($): 2508.1540
+Max Intraday DD MTM (%): 3.7708
+Equity cahnge överenstämmer med PnL_USD. Det som är för attraktivt för att vara sant är den låga drawdownen och hög sharpe. Troligtvis är våran cost model för snäll då den inte tar hänsyn till spread widening under session rollover, slippage vid nyheter och 
+plötsliga gaps. Strategin 5 pips i average win, 11 pips i average loss och en 78% winrate. En small win/larger loss profil med så många trades som vi har dör ofta när spread blir större och slippage spikar. Så nästa realistiska steg är att köra tuffare 
+cost model. Vi ändar cost modellen så att den blir mer konservativ än FTMOs vanliga kostnader. En mer konservativ och hård cost model kan vara fixed_spread_pips: 0.75, slippage_pips: 0.2 och 0.25 i commissions:
+Market: EURUSD
+Trades: 5551
+Total PnL (points): 0.0721
+Gross Profit: 1.5872
+Gross Loss: -1.5151
+Profit Factor: 1.0476
+Winrate: 0.6799
+Avg Win: 0.0004
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0000
+Max Drawdown (points): 0.0766
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 0.8122
+Days total: 5041
+Days non-zero: 3652
+Share non-zero: 0.7244594326522515
+EURUSD {'slippage_pips': 0.2, 'fixed_spread_pips': 0.75, 'comm_pips_per_side': 0.25}
 
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 3978.3394
+Max DD MTM (%): 7.1599
+Max Intraday DD MTM ($): 2067.7131
+Max Intraday DD MTM (%): 3.7710
 
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: 2382.3061258705516
+Equity change: 2382.3061258709204
+Diff: -3.688001015689224e-10
+Avg Units: 46742.22444625099
+Median Units: 47781.52047037972
+Avg pips/trade: 0.12980544046468392
+Median pips/trade: 1.6500000000029829
+Approx $ per pip @ avg units: 4.6742224446251
 
-Vi testar alla marknader EURUSD, GBPUSD, USDJPY, AUDUSD, USDCHF, USDCAD i en gemensam portfölj där alla marknader tar på sig lika risk. 
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 52382.3061
+Net PnL ($): 2382.3061
+Return (%): 4.7646
+Max Drawdown ($): 3747.8838
+Max Drawdown (%): 6.7451
+Markets: 1
+Trades Closed: 5551
+Days: 5041.0000
+Years: 13.8110
+Sharpe (daily, ann.): 0.1722
+Sortino (daily, ann.): 0.1995
+CAGR (%): 0.3417
+Calmar: 0.0507
+Max DD MTM ($): 3978.3394
+Max DD MTM (%): 7.1599
+Max Intraday DD MTM ($): 2067.7131
+Max Intraday DD MTM (%): 3.7710
+Det finns fortfarande en liten, liten edge vilket är förväntat för en sånhär strategi i de stunder som kostnader öker i samband med rollover, nyheter osv. Men dessa kostndar är inte realistisk, de kommer väldigt sällan vara såhär höga, att edgen inte blir negativ
+här är ett plus. Vi testar alla marknader tillsammans med realistiska everage kostnader, för EURUSD antar vi en fast spread på 0.30 pips och slippage på 0.08 pips. För GBPUSD antar vi en fast spread på 0.40 pips och slippage på 0.10 pips. För USDJPY antar vi en 
+fast spread på 0.35 pips och slippage på 0.10 pips. För AUDUSD antar vi en fast spread på 0.45 pips och slippage på 0.10 pips. För USDCHF antar vi en fast spread på 0.45 pips och slippage på 0.12 pips. För USDCAD antar vi en fast spread på 0.50 pips och slippage 
+på 0.12 pips. Kommissionen modelleras separat och är densamma för samtliga marknader: 0.25 pips per sida (motsvarande $2.5 per lot per sida), vilket ger 0.50 pips round-turn per trade. Nedan är resultat med 1.0 portfölj exposure och jämn fördelning av kapital 
+till varje marknad.
+
 
