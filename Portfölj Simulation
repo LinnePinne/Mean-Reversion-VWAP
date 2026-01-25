@@ -472,4 +472,6 @@ Max DD MTM (%): 2.4029
 Max Intraday DD MTM ($): 1352.8729
 Max Intraday DD MTM (%): 2.4029
 Sämre resultat än equal weights, vilket innebär att portföljen redan var balanserad. Meningen med ERC vikter är inte att optimera avkastning, utan att optimera riskfördelning vilket vi ser i att drawdown blev mindre från -2.8374% till - 2.4029. Vi kör nu block 
-bootstrapp på dessa vikter, vi kommer också göra det på equal weights för att jämföra. Det är mycket möjligt att equal weights är det bättre valet här.
+bootstrapp på dessa vikter, vi kommer också göra det på equal weights för att jämföra. Det är mycket möjligt att equal weights är det bättre valet här. Den första block boostrappen har en block_size på 200, alltså att det är en gruppering av 200 trades som blandas om.
+Vi vill ha stora blocks eftersom vi vill kunna bevare regimer i resampling. Vi kör 5000 simulationer totalt där varje marknad resamples för sig, så vi kommer alltså få 5000 portföljbanor där vi kollar på distribution av nyckeltal i percentiler:
+
