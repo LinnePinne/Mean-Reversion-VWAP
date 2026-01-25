@@ -119,5 +119,357 @@ här är ett plus. Vi testar alla marknader tillsammans med realistiska everage 
 fast spread på 0.35 pips och slippage på 0.10 pips. För AUDUSD antar vi en fast spread på 0.45 pips och slippage på 0.10 pips. För USDCHF antar vi en fast spread på 0.45 pips och slippage på 0.12 pips. För USDCAD antar vi en fast spread på 0.50 pips och slippage 
 på 0.12 pips. Kommissionen modelleras separat och är densamma för samtliga marknader: 0.25 pips per sida (motsvarande $2.5 per lot per sida), vilket ger 0.50 pips round-turn per trade. Nedan är resultat med 1.0 portfölj exposure och jämn fördelning av kapital 
 till varje marknad.
+======================================================================
+ BACKTEST FÖR MARKNAD: EURUSD 
+======================================================================
+--- STATS ---
+Market: EURUSD
+Trades: 4366
+Total PnL (points): 0.3535
+Gross Profit: 1.5381
+Gross Loss: -1.1846
+Profit Factor: 1.2984
+Winrate: 0.7167
+Avg Win: 0.0005
+Avg Loss: -0.0010
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0383
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 4.3484
+======================================================================
+ BACKTEST FÖR MARKNAD: GBPUSD 
+======================================================================
+--- STATS ---
+Market: GBPUSD
+Trades: 4440
+Total PnL (points): 0.6418
+Gross Profit: 2.2575
+Gross Loss: -1.6157
+Profit Factor: 1.3973
+Winrate: 0.7473
+Avg Win: 0.0007
+Avg Loss: -0.0014
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.1047
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 4.2310
+======================================================================
+ BACKTEST FÖR MARKNAD: USDJPY 
+======================================================================
+--- STATS ---
+Market: USDJPY
+Trades: 5395
+Total PnL (points): 11.6565
+Gross Profit: 288.5955
+Gross Loss: -276.9390
+Profit Factor: 1.0421
+Winrate: 0.7053
+Avg Win: 0.0758
+Avg Loss: -0.1742
+Expectancy (avg/trade): 0.0022
+Max Drawdown (points): 16.4350
+Max Losing Streak (trades): 7
+Sharpe (trade-level): 0.7188
+======================================================================
+ BACKTEST FÖR MARKNAD: AUDUSD 
+======================================================================
+--- STATS ---
+Market: AUDUSD
+Trades: 5359
+Total PnL (points): 0.3343
+Gross Profit: 2.2550
+Gross Loss: -1.9207
+Profit Factor: 1.1740
+Winrate: 0.7203
+Avg Win: 0.0006
+Avg Loss: -0.0013
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0744
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 2.9196
+======================================================================
+ BACKTEST FÖR MARKNAD: USDCHF 
+======================================================================
+--- STATS ---
+Market: USDCHF
+Trades: 4421
+Total PnL (points): 0.5709
+Gross Profit: 1.6128
+Gross Loss: -1.0420
+Profit Factor: 1.5479
+Winrate: 0.7412
+Avg Win: 0.0005
+Avg Loss: -0.0009
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0318
+Max Losing Streak (trades): 5
+Sharpe (trade-level): 7.2661
+======================================================================
+ BACKTEST FÖR MARKNAD: USDCAD 
+======================================================================
+--- STATS ---
+Market: USDCAD
+Trades: 4036
+Total PnL (points): 0.3098
+Gross Profit: 1.6860
+Gross Loss: -1.3763
+Profit Factor: 1.2251
+Winrate: 0.7044
+Avg Win: 0.0006
+Avg Loss: -0.0012
+Expectancy (avg/trade): 0.0001
+Max Drawdown (points): 0.0663
+Max Losing Streak (trades): 6
+Sharpe (trade-level): 3.1891
+Days total: 5111
+Days non-zero: 4343
+Share non-zero: 0.8497358638231266
 
+======================================================================
+PORTFOLIO
+======================================================================
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 1337.9453
+Max DD MTM (%): 2.0095
+Max Intraday DD MTM ($): 1065.8764
+Max Intraday DD MTM (%): 1.8054
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: 21218.595994585827
+Equity change: 21218.595994586198
+Diff: -3.710738383233547e-10
+Avg Units: 10317.550957371832
+Median Units: 10168.902190015197
+Avg pips/trade: 4.949396794794866
+Median pips/trade: 3.3000000000004692
+$ per pip (approx) per market @ avg units (using median Entry Price):
+AUDUSD: 1.3870
+EURUSD: 0.8942
+GBPUSD: 0.7591
+USDCAD: 0.7843
+USDCHF: 1.0909
+USDJPY: 0.9202
+Approx $ per pip @ avg units: 85.57262218243598
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 71218.5960
+Net PnL ($): 21218.5960
+Return (%): 42.4372
+Max Drawdown ($): 1237.4755
+Max Drawdown (%): 1.7794
+Markets: 6
+Trades Closed: 28017
+Days: 5111.0000
+Years: 14.0027
+Sharpe (daily, ann.): 1.6900
+Sortino (daily, ann.): 2.1081
+CAGR (%): 2.5585
+Calmar: 1.4379
+Max DD MTM ($): 1337.9453
+Max DD MTM (%): 2.0095
+Max Intraday DD MTM ($): 1065.8764
+Max Intraday DD MTM (%): 1.8054
+USDJPY överlever inte högre och hårdare kostnader så vi gör beslutet att plocka bort den marknaden från portföljen. Resten av marknaderna har fortfarande bra edge, men AUDUSD presterar medelmåttigt och inkonsekvent. Kör vi en backtest på AUDUSD från 2017 till 2026 
+med dessa kostnader får vi:
+--- STATS ---
+Market: AUDUSD
+Trades: 3582
+Total PnL (points): -0.0035
+Gross Profit: 1.1580
+Gross Loss: -1.1615
+Profit Factor: 0.9970
+Winrate: 0.7018
+Avg Win: 0.0005
+Avg Loss: -0.0011
+Expectancy (avg/trade): -0.0000
+Max Drawdown (points): 0.1098
+Max Losing Streak (trades): 5
+Sharpe (trade-level): -0.0427
+Days total: 3285
+Days non-zero: 2430
+Share non-zero: 0.7397260273972602
+AUDUSD {'slippage_pips': 0.14, 'fixed_spread_pips': 0.6, 'comm_pips_per_side': 0.25}
 
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 8134.6494
+Max DD MTM (%): 15.9540
+Max Intraday DD MTM ($): 1866.3178
+Max Intraday DD MTM (%): 3.9778
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: -438.77864814042823
+Equity change: -438.77864814029454
+Diff: -1.3369572116062045e-10
+Avg Units: 66671.41297354757
+Median Units: 66985.12597154977
+Avg pips/trade: -0.009762702399559495
+Median pips/trade: 2.02000000000141
+
+$ per pip (approx) per market @ avg units (using median Entry Price):
+AUDUSD: 6.6671
+Approx $ per pip @ avg units: 6.667141297354758
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 49561.2214
+Net PnL ($): -438.7786
+Return (%): -0.8776
+Max Drawdown ($): 7807.0996
+Max Drawdown (%): 15.3361
+Markets: 1
+Trades Closed: 3582
+Days: 3285.0000
+Years: 9.0000
+Sharpe (daily, ann.): -0.0063
+Sortino (daily, ann.): -0.0072
+CAGR (%): -0.1055
+Calmar: -0.0069
+Max DD MTM ($): 8134.6494
+Max DD MTM (%): 15.9540
+Max Intraday DD MTM ($): 1866.3178
+Max Intraday DD MTM (%): 3.9778
+AUDUSD exkluderas p.g.a. brist på robust edge efter 2017 under realistiska costs, med PF≈1.0 och hög drawdown relativt avkastning. Vi kör en till portfölj simulation, denna gång utan USDJPY och AUDUSD. Nedan är resultaten för den nya portföljen:
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 1641.4616
+Max DD MTM (%): 2.8374
+Max Intraday DD MTM ($): 1641.4616
+Max Intraday DD MTM (%): 2.8374
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: 24958.86830408187
+Equity change: 24958.86830408132
+Diff: 5.493347998708487e-10
+Avg Units: 14090.016842640238
+Median Units: 14144.361735371465
+Avg pips/trade: 1.086694664890318
+Median pips/trade: 2.8099999999997016
+
+$ per pip (approx) per market @ avg units (using median Entry Price):
+EURUSD: 1.3648
+GBPUSD: 1.1597
+USDCAD: 1.1968
+USDCHF: 1.6637
+Approx $ per pip @ avg units: 1.1694998167846875
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 74958.8683
+Net PnL ($): 24958.8683
+Return (%): 49.9177
+Max Drawdown ($): 1123.7478
+Max Drawdown (%): 1.6880
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 2.0262
+Sortino (daily, ann.): 2.4907
+CAGR (%): 2.9372
+Calmar: 1.7400
+Max DD MTM ($): 1641.4616
+Max DD MTM (%): 2.8374
+Max Intraday DD MTM ($): 1641.4616
+Max Intraday DD MTM (%): 2.8374
+
+Tydlig förbättring utan USDJPY och AUDUSD. Max drawdown på 2.8374% i MTM på 14 år är väldigt lågt men är trovärdigt eftesom vi har diversifiering över 4 marknader, låg exposure så att CAGR endast blir 2.9372%. Vi kör ännu hårdare costs som stress test på portföljen. 
+Vi lägger på 0.15 pips spread och 0.04 pips slippage på alla marknader:
+--- MTM / INTRADAY DD ---
+Max DD MTM ($): 1600.3933
+Max DD MTM (%): 2.8374
+Max Intraday DD MTM ($): 1600.3933
+Max Intraday DD MTM (%): 2.8374
+======================================================================
+SANITY CHECKS
+======================================================================
+Sum PnL_USD: 18764.85752499507
+Equity change: 18764.857524994935
+Diff: 1.3460521586239338e-10
+Avg Units: 13456.705222769082
+Median Units: 13473.364122488045
+Avg pips/trade: 0.8566946648899157
+Median pips/trade: 2.579999999999749
+
+$ per pip (approx) per market @ avg units (using median Entry Price):
+EURUSD: 1.3031
+GBPUSD: 1.1062
+USDCAD: 1.1431
+USDCHF: 1.5906
+Approx $ per pip @ avg units: 1.1169230136889006
+======================================================================
+ PORTFÖLJ-RESULTAT (USD) 
+======================================================================
+Start Capital: 50000.0000
+End Equity: 68764.8575
+Net PnL ($): 18764.8575
+Return (%): 37.5297
+Max Drawdown ($): 1151.3499
+Max Drawdown (%): 2.1403
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5961
+Sortino (daily, ann.): 1.9428
+CAGR (%): 2.3041
+Calmar: 1.0765
+Max DD MTM ($): 1600.3933
+Max DD MTM (%): 2.8374
+Max Intraday DD MTM ($): 1600.3933
+Max Intraday DD MTM (%): 2.8374
+Detta är bra stress test resultat eftersom edgen fortfarande lever, den minskar men försvinner inte. Nästa steg för strategin är att bestämma vikt per marknad. Detta görs genom ERC beräkning där procentsatsen för varje marknad representerar den mest optimala 
+viktfördelningen för att varje marknad ska bidra med lika mycket volatilitet (risk). Sedan kommer vi block boostrappa alla trades med dessa erc vikter. ERC vikter:
+======================================================================
+ERC WEIGHTS (from equal-weight daily returns)
+======================================================================
+EURUSD: 0.2765
+GBPUSD: 0.1985
+USDCAD: 0.2868
+USDCHF: 0.2381
+Sum: 1.0
+
+Daily return std per market:
+Market
+EURUSD    0.000331
+GBPUSD    0.000494
+USDCAD    0.000343
+USDCHF    0.000396
+
+Daily return correlation:
+Market    EURUSD    GBPUSD    USDCAD    USDCHF
+Market                                        
+EURUSD  1.000000  0.153465  0.148355  0.310797
+GBPUSD  0.153465  1.000000  0.174258  0.119650
+USDCAD  0.148355  0.174258  1.000000  0.116773
+USDCHF  0.310797  0.119650  0.116773  1.000000
+
+Nu kör vi portfölj simulering med essa vikter:
+======================================================================
+PORTFÖLJ-RESULTAT (ERC weights)
+======================================================================
+Start Capital: 50000.0000
+End Equity: 67725.6383
+Net PnL ($): 17725.6383
+Return (%): 35.4513
+Max Drawdown ($): 1199.5734
+Max Drawdown (%): 2.2626
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5907
+Sortino (daily, ann.): 1.9150
+CAGR (%): 2.1926
+Calmar: 0.9691
+Max DD MTM ($): 1352.8729
+Max DD MTM (%): 2.4029
+Max Intraday DD MTM ($): 1352.8729
+Max Intraday DD MTM (%): 2.4029
+Sämre resultat än equal weights, vilket innebär att portföljen redan var balanserad. Meningen med ERC vikter är inte att optimera avkastning, utan att optimera riskfördelning vilket vi ser i att drawdown blev mindre från -2.8374% till - 2.4029. Vi kör nu block 
+bootstrapp på dessa vikter, vi kommer också göra det på equal weights för att jämföra. Det är mycket möjligt att equal weights är det bättre valet här.
