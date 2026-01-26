@@ -472,6 +472,16 @@ Max DD MTM (%): 2.4029
 Max Intraday DD MTM ($): 1352.8729
 Max Intraday DD MTM (%): 2.4029
 Sämre resultat än equal weights, vilket innebär att portföljen redan var balanserad. Meningen med ERC vikter är inte att optimera avkastning, utan att optimera riskfördelning vilket vi ser i att drawdown blev mindre från -2.8374% till - 2.4029. Vi kör nu block 
-bootstrapp på dessa vikter, vi kommer också göra det på equal weights för att jämföra. Det är mycket möjligt att equal weights är det bättre valet här. Den första block boostrappen har en block_size på 200, alltså att det är en gruppering av 200 trades som blandas om.
-Vi vill ha stora blocks eftersom vi vill kunna bevare regimer i resampling. Vi kör 5000 simulationer totalt där varje marknad resamples för sig, så vi kommer alltså få 5000 portföljbanor där vi kollar på distribution av nyckeltal i percentiler:
-
+bootstrapp på dessa vikter, vi kommer också göra det på equal weights för att jämföra. Det är mycket möjligt att equal weights är det bättre valet här. Den första block boostrappen har en block_size på 20, alltså att det är grupperingar av 20 trades som blandas om.
+Vi vill ha stora blocks eftersom vi vill kunna bevare regimer i resampling. Vi kör 50000 simulationer totalt där returns resamplas, så vi kommer alltså få 50000 portföljbanor där vi kollar på distribution av nyckeltal i percentiler:
+          EndEquity  TotalReturn_%       MaxDD_%        Sharpe        CAGR_%
+count  50000.000000   50000.000000  50000.000000  50000.000000  50000.000000
+mean   67865.121609      35.730243     -2.181410      1.578421      2.200919
+std     3348.514964       6.697030      0.580337      0.297003      0.360742
+min    54682.013903       9.364028     -6.718225      0.406198      0.642301
+5%     62488.855994      24.977712     -3.264753      1.103117      1.607578
+25%    65592.415928      31.184832     -2.479967      1.375095      1.960465
+50%    67785.886953      35.571774     -2.078831      1.571342      2.200639
+75%    70098.503134      40.197006     -1.766699      1.775365      2.446168
+95%    73471.741676      46.943483     -1.440920      2.078834      2.791141
+max    83569.839879      67.139680     -0.969557      2.911921      3.742357
