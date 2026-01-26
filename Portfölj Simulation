@@ -485,3 +485,63 @@ min    54682.013903       9.364028     -6.718225      0.406198      0.642301
 75%    70098.503134      40.197006     -1.766699      1.775365      2.446168
 95%    73471.741676      46.943483     -1.440920      2.078834      2.791141
 max    83569.839879      67.139680     -0.969557      2.911921      3.742357
+Prob(MaxDD worse than -10%): 0.54434
+Prob(MaxDD worse than -15%): 0.07332
+Prob(CAGR < 0): 0.0
+Strateginär ganska stabil i slutresultatet, den har även mycket begränsad drawdown risk. Det viktigaste som visar hur stark edgen är sharpe som i värsta fall fortfarande är positiv på 0.41 och där mindre än 5% ligger runt 1. Eftersom equal weights hade lite bättre 
+resultat i portfölj simulation överväger vi att använda det över ERC vikter. För att jämföra de två alternativen lättare kör vi en bootstrapp på equal weights också:
+          EndEquity  TotalReturn_%       MaxDD_%        Sharpe        CAGR_%
+count  50000.000000   50000.000000  50000.000000  50000.000000  50000.000000
+mean   68911.004139      37.822008     -2.221575      1.612570      2.312260
+std     3505.414588       7.010829      0.587564      0.299337      0.372256
+min    54708.278675       9.416557     -6.948843      0.385580      0.645758
+5%     63269.748933      26.539498     -3.315823      1.130617      1.697876
+25%    66515.234142      33.030468     -2.522240      1.408109      2.062405
+50%    68829.781200      37.659562     -2.117075      1.605494      2.312416
+75%    71224.578638      42.449157     -1.803720      1.811224      2.563011
+95%    74808.067025      49.616134     -1.475799      2.116425      2.923751
+max    85164.366028      70.328732     -0.955030      2.937214      3.882700
+Prob(MaxDD worse than -10%): 0.0
+Prob(MaxDD worse than -15%): 0.0
+Prob(CAGR < 0): 0.0
+Equal weights har högre median och mean för avkastning, samt ett böttre 5%-utfall (worst case). Max drawdown är nästan identiska, men ERC har större sannolikhet att nå -15% eller -10%. Equal weights är bättre i median shapre och cagr, samt i 5%-utfall men skillnaderna
+är väldigt små. Equal weighs är klart det bättre alternativet. Nu vill vi börja skala exposure tills vi når så högt slutresultat som möjligt men med en kontrollerbar max drawdown. Vi börjar öka exposure med 5, ungefärlig 1:5 hävstång men vi använder en 
+exponering/skalningsfaktor exposure_scale. En faktor på 5 innebär att vi tar cirka 5× större notional positioner jämfört med baseline (≈ 1:5 hävstång), men faktisk genomsnittlig hävstång varierar beroende på samtidiga positioner och trade-overlap. 5.0 Exposure: 
+Start Capital: 50000.0000
+End Equity: 238901.2835
+Net PnL ($): 188901.2835
+Return (%): 377.8026
+Max Drawdown ($): 19049.0847
+Max Drawdown (%): 10.4004
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5931
+Sortino (daily, ann.): 1.9388
+CAGR (%): 11.8292
+Calmar: 1.1374
+Max DD MTM ($): 19915.3537
+Max DD MTM (%): 13.9647
+Max Intraday DD MTM ($): 12965.6980
+Max Intraday DD MTM (%): 13.9647
+Detta är kontrollerbart. Vi testar 10:
+Start Capital: 50000.0000
+End Equity: 1058876.8587
+Net PnL ($): 1008876.8587
+Return (%): 2017.7537
+Max Drawdown ($): 159868.2416
+Max Drawdown (%): 20.0589
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5893
+Sortino (daily, ann.): 1.9338
+CAGR (%): 24.3876
+Calmar: 1.2158
+Max DD MTM ($): 166920.7749
+Max DD MTM (%): 27.3927
+Max Intraday DD MTM ($): 111592.1904
+Max Intraday DD MTM (%): 27.3927
+Detta är icke kontrollerbart. Vi kör 7.5 och bootstrappar det samtidigt.
