@@ -525,7 +525,7 @@ Max DD MTM ($): 19915.3537
 Max DD MTM (%): 13.9647
 Max Intraday DD MTM ($): 12965.6980
 Max Intraday DD MTM (%): 13.9647
-Detta är kontrollerbart. Vi testar 10:
+Detta är kontrollerbart och vi kan skala upp ännu mer. Vi testar 10:
 Start Capital: 50000.0000
 End Equity: 1058876.8587
 Net PnL ($): 1008876.8587
@@ -544,4 +544,103 @@ Max DD MTM ($): 166920.7749
 Max DD MTM (%): 27.3927
 Max Intraday DD MTM ($): 111592.1904
 Max Intraday DD MTM (%): 27.3927
-Detta är icke kontrollerbart. Vi kör 7.5 och bootstrappar det samtidigt.
+Detta är icke kontrollerbart. Vi kör 7.5 och bootstrappar det samtidigt:
+Start Capital: 50000.0000
+End Equity: 507804.6057
+Net PnL ($): 457804.6057
+Return (%): 915.6092
+Max Drawdown ($): 59044.5931
+Max Drawdown (%): 15.3212
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5912
+Sortino (daily, ann.): 1.9363
+CAGR (%): 18.0223
+Calmar: 1.1763
+Max DD MTM ($): 61689.3452
+Max DD MTM (%): 20.7439
+Max Intraday DD MTM ($): 40694.7464
+Max Intraday DD MTM (%): 20.7439
+          EndEquity  TotalReturn_%       MaxDD_%        Sharpe        CAGR_%
+count  5.000000e+04   50000.000000  50000.000000  50000.000000  50000.000000
+mean   5.502896e+05    1000.579197    -16.040827      1.607953     18.131471
+std    2.192800e+05     438.560011      3.918191      0.299911      3.259386
+min    8.678073e+04      73.561457    -43.284552      0.371722      4.022495
+5%     2.698949e+05     439.789798    -23.358935      1.125314     12.816730
+25%    3.942612e+05     688.522409    -18.145424      1.402799     15.916702
+50%    5.115987e+05     923.197480    -15.408671      1.601066     18.097015
+75%    6.627848e+05    1225.569564    -13.228699      1.807106     20.304420
+95%    9.613105e+05    1822.620962    -10.866629      2.113093     23.547081
+max    2.568651e+06    5037.301129     -7.165622      2.934487     32.544887
+Prob(MaxDD worse than -10%): 0.98386
+Prob(MaxDD worse than -15%): 0.5462
+Prob(CAGR < 0): 0.0
+Fortfarande för mycket risk, 6.0:
+Start Capital: 50000.0000
+End Equity: 323740.8474
+Net PnL ($): 273740.8474
+Return (%): 547.4817
+Max Drawdown ($): 30622.3976
+Max Drawdown (%): 12.3908
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 1.5923
+Sortino (daily, ann.): 1.9378
+CAGR (%): 14.2851
+Calmar: 1.1529
+Max DD MTM ($): 32006.5830
+Max DD MTM (%): 16.6923
+Max Intraday DD MTM ($): 20947.2135
+Max Intraday DD MTM (%): 16.6923
+          EndEquity  TotalReturn_%       MaxDD_%        Sharpe        CAGR_%
+count  5.000000e+04   50000.000000  50000.000000  50000.000000  50000.000000
+mean   3.410891e+05     582.178267    -12.946741      1.609019     14.362533
+std    1.070802e+05     214.160359      3.222791      0.299776      2.517495
+min    7.956536e+04      59.130712    -36.147446      0.374890      3.378629
+5%     1.955317e+05     291.063445    -18.961527      1.126553     10.245635
+25%    2.645767e+05     429.153408    -14.652236      1.404011     12.656252
+50%    3.256288e+05     551.257651    -12.418857      1.602144     14.341777
+75%    4.004466e+05     700.893187    -10.638854      1.808139     16.045840
+95%    5.386380e+05     977.276010     -8.729748      2.113604     18.532868
+max    1.180313e+06    2260.625975     -5.721378      2.935116     25.374121
+Prob(MaxDD worse than -10%): 0.83254
+Prob(MaxDD worse than -15%): 0.22204
+Prob(CAGR < 0): 0.0
+I en av 5 fall hamnar vi i en drawdown -15% eller mer, samtidigt som returns är väldigt högt. Vi låser in 6.0 exposure. Vi kör nu portföljen helt utan kostander för att se portföljens mest optimistiska utfall och därmed förstå hur mycket 
+edge som kostnader äter upp:
+Start Capital: 50000.0000
+End Equity: 6790336.3743
+Net PnL ($): 6740336.3743
+Return (%): 13480.6727
+Max Drawdown ($): 301260.2805
+Max Drawdown (%): 9.1432
+Markets: 4
+Trades Closed: 17263
+Days: 5103.0000
+Years: 13.9808
+Sharpe (daily, ann.): 4.0964
+Sortino (daily, ann.): 5.2935
+CAGR (%): 42.0754
+Calmar: 4.6018
+Max DD MTM ($): 471110.9396
+Max DD MTM (%): 16.6896
+Max Intraday DD MTM ($): 340886.7983
+Max Intraday DD MTM (%): 16.6896
+          EndEquity  TotalReturn_%       MaxDD_%        Sharpe        CAGR_%
+count  5.000000e+04   50000.000000  50000.000000  50000.000000  50000.000000
+mean   7.193734e+06   14287.467306     -9.112260      4.124910     42.216621
+std    2.294914e+06    4589.828354      1.827751      0.394721      3.176208
+min    1.630674e+06    3161.348345    -25.279083      2.465162     28.306330
+5%     4.090932e+06    8081.864682    -12.516486      3.492875     37.031285
+25%    5.556588e+06   11013.176712     -9.990204      3.853608     40.065687
+50%    6.856632e+06   13613.264838     -9.143212      4.113509     42.187795
+75%    8.459193e+06   16818.386690     -7.893329      4.385375     44.340044
+95%    1.144679e+07   22793.571130     -6.384826      4.791685     47.496657
+max    2.400728e+07   47914.561474     -4.686773      5.974773     55.521117
+Prob(MaxDD worse than -10%): 0.24834
+Prob(MaxDD worse than -15%): 0.00804
+Prob(CAGR < 0): 0.0
