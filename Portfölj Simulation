@@ -644,3 +644,6 @@ max    2.400728e+07   47914.561474     -4.686773      5.974773     55.521117
 Prob(MaxDD worse than -10%): 0.24834
 Prob(MaxDD worse than -15%): 0.00804
 Prob(CAGR < 0): 0.0
+Eftersom strategin blir superstark utan costs, innebär det att edgen är stark men extremt cost-känslig. Vi låser denna strategi med VWAP där VWAP beräknas såhär: (cum_tp_vol = cumsum(tp_vol)), (cum_vol = cumsum(volume)), VWAP = cum_tp_vol / cum_vol. Upper och
+lower bands Upper = VWAP + std_mult ⋅ TP_STD, Lower = VWAP − std_mult ⋅ TP_STD där STD_multi är inlåst som 2.6. VWAP återsätlls klockan 21:00 (Stockholms tid) varje dag, en timme senare, vid 22:00 börjar session och 5 timmar senare, klockan 03:00 tar den slut. 
+Entry signaler uppstår endast inom sessionen, exits kan ske när som. Long entry när pris går över upper band, Short entry när pris går under lower band. Exit är alltid på VWAP.
